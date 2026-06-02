@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Servicios base
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Inyección de dependencias
 builder.Services.AddScoped<IGeneroService, GeneroService>();
@@ -18,10 +21,14 @@ var app = builder.Build();
 // Pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Por ahora puedes dejarlo comentado para evitar warning HTTPS en desarrollo
+// app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
