@@ -14,12 +14,12 @@ public class GeneroRepository(IConfiguration configuration) : IGeneroRepository
 
     public async Task<List<Genero>> ObtenerGenerosAsync()
     {
-        List<Genero> lista = new List<Genero>();
+        List<Genero> lista = [];
 
-        await using NpgsqlConnection cn = new NpgsqlConnection(_connectionString);
+        await using NpgsqlConnection cn = new(_connectionString);
         await cn.OpenAsync();
 
-        await using NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM sp_obtener_generos()", cn);
+        await using NpgsqlCommand cmd = new("SELECT * FROM sp_obtener_generos()", cn);
 
         await using NpgsqlDataReader dr = await cmd.ExecuteReaderAsync();
 
