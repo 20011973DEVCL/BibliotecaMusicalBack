@@ -1,5 +1,5 @@
 -- ============================================================
--- 04_verificar_datos.sql
+-- 04_verificar_datos_corregido.sql
 -- Proyecto: Biblioteca Musical
 -- Verificación rápida de datos cargados
 -- ============================================================
@@ -25,29 +25,27 @@ UNION ALL SELECT 'roles', COUNT(*) FROM roles
 UNION ALL SELECT 'usuarios_roles', COUNT(*) FROM usuarios_roles
 ORDER BY tabla;
 
--- Vista resumen de albums con artista y genero
 SELECT
-    al.album_id,
-    ar.nombre AS artista,
-    al.titulo AS album,
-    g.nombre AS genero,
-    al.anio_lanzamiento,
-    f.nombre AS formato
+    al.alb_codigo,
+    ar.art_nombre AS artista,
+    al.alb_titulo AS album,
+    g.gen_nombre AS genero,
+    al.alb_anio_lanzamiento,
+    f.fmt_nombre AS formato
 FROM albums al
-JOIN artistas ar ON ar.artista_id = al.artista_id
-LEFT JOIN generos g ON g.genero_id = al.genero_id
-LEFT JOIN formatos_musicales f ON f.formato_id = al.formato_id
-ORDER BY ar.nombre, al.anio_lanzamiento;
+JOIN artistas ar ON ar.art_codigo = al.art_codigo
+LEFT JOIN generos g ON g.gen_codigo = al.gen_codigo
+LEFT JOIN formatos_musicales f ON f.fmt_codigo = al.fmt_codigo
+ORDER BY ar.art_nombre, al.alb_anio_lanzamiento;
 
--- Vista resumen de canciones
 SELECT
-    c.cancion_id,
-    ar.nombre AS artista,
-    al.titulo AS album,
-    c.titulo AS cancion,
-    c.numero_pista,
-    c.duracion_segundos
+    c.can_codigo,
+    ar.art_nombre AS artista,
+    al.alb_titulo AS album,
+    c.can_titulo AS cancion,
+    c.can_numero_pista,
+    c.can_duracion_segundos
 FROM canciones c
-LEFT JOIN albums al ON al.album_id = c.album_id
-LEFT JOIN artistas ar ON ar.artista_id = al.artista_id
-ORDER BY ar.nombre, al.titulo, c.numero_pista;
+LEFT JOIN albums al ON al.alb_codigo = c.alb_codigo
+LEFT JOIN artistas ar ON ar.art_codigo = al.art_codigo
+ORDER BY ar.art_nombre, al.alb_titulo, c.can_numero_pista;

@@ -1,16 +1,13 @@
 -- ============================================================
--- 01_seed_catalogos_base.sql
+-- 01_seed_catalogos_base_corregido.sql
 -- Proyecto: Biblioteca Musical
--- Modelo real: paises, generos, tipos_artista, formatos, sellos, roles
+-- Modelo corregido: columnas con prefijo por tabla
 -- Motor: PostgreSQL / Neon
 -- ============================================================
 
 BEGIN;
 
--- =========================
--- PAISES
--- =========================
-INSERT INTO paises (nombre, codigo_iso, activo)
+INSERT INTO paises (pais_nombre, pais_codigo_iso, pais_activo)
 VALUES
 ('Chile', 'CHL', TRUE),
 ('Argentina', 'ARG', TRUE),
@@ -25,12 +22,9 @@ VALUES
 ('Suecia', 'SWE', TRUE),
 ('Noruega', 'NOR', TRUE),
 ('Australia', 'AUS', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (pais_nombre) DO NOTHING;
 
--- =========================
--- GENEROS
--- =========================
-INSERT INTO generos (nombre, descripcion, activo)
+INSERT INTO generos (gen_nombre, gen_descripcion, gen_activo)
 VALUES
 ('Pop', 'Música popular orientada a melodías accesibles.', TRUE),
 ('Rock', 'Género derivado del rock and roll con guitarras eléctricas.', TRUE),
@@ -44,12 +38,9 @@ VALUES
 ('Clásica', 'Música académica de tradición orquestal o de cámara.', TRUE),
 ('Folk', 'Música tradicional o de raíz cultural.', TRUE),
 ('Jazz', 'Género basado en improvisación, armonía compleja y swing.', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (gen_nombre) DO NOTHING;
 
--- =========================
--- TIPOS DE ARTISTA
--- =========================
-INSERT INTO tipos_artista (nombre)
+INSERT INTO tipos_artista (tart_nombre)
 VALUES
 ('Solista'),
 ('Grupo'),
@@ -57,12 +48,9 @@ VALUES
 ('Dúo'),
 ('Compositor'),
 ('Productor')
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (tart_nombre) DO NOTHING;
 
--- =========================
--- FORMATOS MUSICALES
--- =========================
-INSERT INTO formatos_musicales (nombre, descripcion, activo)
+INSERT INTO formatos_musicales (fmt_nombre, fmt_descripcion, fmt_activo)
 VALUES
 ('CD', 'Disco compacto físico.', TRUE),
 ('Vinilo', 'Disco fonográfico de larga duración.', TRUE),
@@ -71,76 +59,56 @@ VALUES
 ('Digital ALAC', 'Archivo digital sin pérdida compatible con Apple.', TRUE),
 ('Digital MP3', 'Archivo digital comprimido.', TRUE),
 ('Streaming', 'Contenido reproducido desde plataforma en línea.', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (fmt_nombre) DO NOTHING;
 
--- =========================
--- SELLOS DISCOGRAFICOS
--- =========================
-INSERT INTO sellos_discograficos (nombre, pais_id, activo)
-SELECT 'Virgin Records', p.pais_id, TRUE
-FROM paises p WHERE p.nombre = 'Reino Unido'
-ON CONFLICT (nombre) DO NOTHING;
+INSERT INTO sellos_discograficos (sello_nombre, pais_codigo, sello_activo)
+SELECT 'Virgin Records', p.pais_codigo, TRUE FROM paises p WHERE p.pais_nombre = 'Reino Unido'
+ON CONFLICT (sello_nombre) DO NOTHING;
 
-INSERT INTO sellos_discograficos (nombre, pais_id, activo)
-SELECT 'Polydor Records', p.pais_id, TRUE
-FROM paises p WHERE p.nombre = 'Reino Unido'
-ON CONFLICT (nombre) DO NOTHING;
+INSERT INTO sellos_discograficos (sello_nombre, pais_codigo, sello_activo)
+SELECT 'Polydor Records', p.pais_codigo, TRUE FROM paises p WHERE p.pais_nombre = 'Reino Unido'
+ON CONFLICT (sello_nombre) DO NOTHING;
 
-INSERT INTO sellos_discograficos (nombre, pais_id, activo)
-SELECT 'Universal Music', p.pais_id, TRUE
-FROM paises p WHERE p.nombre = 'Estados Unidos'
-ON CONFLICT (nombre) DO NOTHING;
+INSERT INTO sellos_discograficos (sello_nombre, pais_codigo, sello_activo)
+SELECT 'Universal Music', p.pais_codigo, TRUE FROM paises p WHERE p.pais_nombre = 'Estados Unidos'
+ON CONFLICT (sello_nombre) DO NOTHING;
 
-INSERT INTO sellos_discograficos (nombre, pais_id, activo)
-SELECT 'Polar Music', p.pais_id, TRUE
-FROM paises p WHERE p.nombre = 'Suecia'
-ON CONFLICT (nombre) DO NOTHING;
+INSERT INTO sellos_discograficos (sello_nombre, pais_codigo, sello_activo)
+SELECT 'Polar Music', p.pais_codigo, TRUE FROM paises p WHERE p.pais_nombre = 'Suecia'
+ON CONFLICT (sello_nombre) DO NOTHING;
 
-INSERT INTO sellos_discograficos (nombre, pais_id, activo)
-SELECT 'Arista Records', p.pais_id, TRUE
-FROM paises p WHERE p.nombre = 'Estados Unidos'
-ON CONFLICT (nombre) DO NOTHING;
+INSERT INTO sellos_discograficos (sello_nombre, pais_codigo, sello_activo)
+SELECT 'Arista Records', p.pais_codigo, TRUE FROM paises p WHERE p.pais_nombre = 'Estados Unidos'
+ON CONFLICT (sello_nombre) DO NOTHING;
 
--- =========================
--- UBICACIONES FISICAS
--- =========================
-INSERT INTO ubicaciones_fisicas (nombre, descripcion, activo)
+INSERT INTO ubicaciones_fisicas (ubi_nombre, ubi_descripcion, ubi_activo)
 VALUES
 ('Estante Principal', 'Estante principal de la colección musical.', TRUE),
 ('Rack Vintage Pioneer', 'Zona asociada al equipo de sonido principal.', TRUE),
 ('Caja Respaldo', 'Caja de respaldo para discos o formatos físicos.', TRUE),
 ('Biblioteca Digital', 'Ubicación lógica para música digital.', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (ubi_nombre) DO NOTHING;
 
--- =========================
--- COLECCIONES
--- =========================
-INSERT INTO colecciones (nombre, descripcion, activo)
+INSERT INTO colecciones (col_nombre, col_descripcion, col_activo)
 VALUES
 ('Colección Principal', 'Colección general de álbumes favoritos.', TRUE),
 ('Clásicos 70s y 80s', 'Álbumes destacados de los años 70 y 80.', TRUE),
 ('New Age y Electrónica', 'Música atmosférica, electrónica y espiritual.', TRUE),
 ('Baladas Favoritas', 'Selección de baladas y canciones melódicas.', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (col_nombre) DO NOTHING;
 
--- =========================
--- PLAYLISTS
--- =========================
-INSERT INTO playlists (nombre, descripcion, activo)
+INSERT INTO playlists (play_nombre, play_descripcion, play_activo)
 VALUES
 ('Noche tranquila', 'Canciones suaves para escuchar de noche.', TRUE),
 ('Viaje por carretera', 'Música para acompañar viajes largos.', TRUE),
 ('Clásicos favoritos', 'Selección de canciones clásicas de la biblioteca.', TRUE)
 ON CONFLICT DO NOTHING;
 
--- =========================
--- ROLES
--- =========================
-INSERT INTO roles (nombre, activo)
+INSERT INTO roles (rol_nombre, rol_activo)
 VALUES
 ('Administrador', TRUE),
 ('Usuario', TRUE),
 ('Invitado', TRUE)
-ON CONFLICT (nombre) DO NOTHING;
+ON CONFLICT (rol_nombre) DO NOTHING;
 
 COMMIT;
