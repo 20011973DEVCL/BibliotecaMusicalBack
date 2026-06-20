@@ -1,6 +1,25 @@
 @BibliotecaMusicalBack.Api_HostAddress = http://localhost:5171
 
-GET {{BibliotecaMusicalBack.Api_HostAddress}}/weatherforecast/
+GET {{BibliotecaMusicalBack.Api_HostAddress}}/health
 Accept: application/json
 
 ###
+
+GET {{BibliotecaMusicalBack.Api_HostAddress}}/api/artistas?pagina=1&tamanoPagina=20
+Accept: application/json
+
+###
+
+GET {{BibliotecaMusicalBack.Api_HostAddress}}/api/albums?buscar=Enigma
+Accept: application/json
+
+###
+
+POST {{BibliotecaMusicalBack.Api_HostAddress}}/api/generos
+Content-Type: application/json
+
+{
+  "nombre": "Ambient",
+  "descripcion": "Música atmosférica",
+  "activo": true
+}
