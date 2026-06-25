@@ -46,7 +46,9 @@ CREATE TABLE artistas (
     art_fecha_fallecimiento DATE,
     art_biografia TEXT,
     art_activo BOOLEAN NOT NULL DEFAULT TRUE,
-    art_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    art_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_artistas_nombre UNIQUE (art_nombre),
+    CONSTRAINT ck_artistas_fechas CHECK (art_fecha_fallecimiento IS NULL OR art_fecha_nacimiento IS NULL OR art_fecha_fallecimiento >= art_fecha_nacimiento)
 );
 
 CREATE TABLE tipos_artista (
@@ -88,7 +90,10 @@ CREATE TABLE albums (
     alb_portada_url TEXT,
     alb_observacion TEXT,
     alb_activo BOOLEAN NOT NULL DEFAULT TRUE,
-    alb_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    alb_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_albums_artista_titulo_formato UNIQUE NULLS NOT DISTINCT (art_codigo, alb_titulo, fmt_codigo),
+    CONSTRAINT ck_albums_anio CHECK (alb_anio_lanzamiento IS NULL OR alb_anio_lanzamiento BETWEEN 1000 AND 9999),
+    CONSTRAINT ck_albums_discos CHECK (alb_numero_discos > 0)
 );
 
 CREATE TABLE canciones (
@@ -100,7 +105,10 @@ CREATE TABLE canciones (
     can_numero_pista INTEGER,
     can_letra TEXT,
     can_activo BOOLEAN NOT NULL DEFAULT TRUE,
-    can_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    can_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_canciones_album_titulo_pista UNIQUE NULLS NOT DISTINCT (alb_codigo, can_titulo, can_numero_pista),
+    CONSTRAINT ck_canciones_duracion CHECK (can_duracion_segundos IS NULL OR can_duracion_segundos > 0),
+    CONSTRAINT ck_canciones_pista CHECK (can_numero_pista IS NULL OR can_numero_pista > 0)
 );
 
 CREATE TABLE canciones_artistas (
@@ -169,7 +177,8 @@ CREATE TABLE playlists (
     play_nombre VARCHAR(150) NOT NULL,
     play_descripcion VARCHAR(300),
     play_activo BOOLEAN NOT NULL DEFAULT TRUE,
-    play_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    play_fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_playlists_nombre UNIQUE (play_nombre)
 );
 
 CREATE TABLE playlist_canciones (
@@ -233,3 +242,12 @@ BEGIN
     ORDER BY g.gen_nombre;
 END;
 $$;
+
+CREATE INDEX ix_artistas_pais ON artistas(pais_codigo);
+CREATE INDEX ix_albums_artista ON albums(art_codigo);
+CREATE INDEX ix_albums_genero ON albums(gen_codigo);
+CREATE INDEX ix_canciones_album ON canciones(alb_codigo);
+CREATE INDEX ix_canciones_genero ON canciones(gen_codigo);
+CREATE INDEX ix_biblioteca_items_album ON biblioteca_items(alb_codigo);
+CREATE INDEX ix_playlist_canciones_playlist_orden ON playlist_canciones(play_codigo, play_can_orden);
+CREATE INDEX ix_coleccion_albums_coleccion ON coleccion_albums(col_codigo);
