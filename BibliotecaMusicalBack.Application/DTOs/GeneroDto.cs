@@ -1,7 +1,7 @@
+using BibliotecaMusicalBack.Domain.Entities;
+
 namespace BibliotecaMusicalBack.Application.DTOs;
 
-public class GeneroDto
+public class GeneroDto : Genero
 {
-    public int GenCodigo { get; set; }
-    public string GenNombre { get; set; } = string.Empty;
 }

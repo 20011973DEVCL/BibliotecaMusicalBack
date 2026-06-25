@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BibliotecaMusicalBack.Api\BibliotecaMusicalBack.Api.csproj" />
     <ProjectReference Include="..\BibliotecaMusicalBack.Application\BibliotecaMusicalBack.Application.csproj" />
     <ProjectReference Include="..\BibliotecaMusicalBack.Domain\BibliotecaMusicalBack.Domain.csproj" />
   </ItemGroup>
